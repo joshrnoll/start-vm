@@ -48,8 +48,9 @@ if VBoxManage list runningvms | grep -q "$VM_NAME"; then
     echo "VM is already running."
     fullscreen_vm "$VM_NAME"
 else
-    echo "Starting VM..."
-    VBoxManage startvm "$VM_NAME" --type gui
-    fullscreen_vm "$VM_NAME"
+    echo "Attempting to start VM..."
+    VBoxManage startvm "$VM_NAME" --type gui 2>/dev/null || { echo "Cannot start VM... Does it exist?"; exit 1; }
+    echo "VM started. Attempting to enter fullscreen..."
+    fullscreen_vm "$VM_NAME" || { echo "Cannot fullscreen VM... Does it exist?"; exit 1; }
 fi
 
